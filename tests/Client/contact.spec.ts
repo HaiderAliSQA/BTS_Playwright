@@ -18,35 +18,18 @@ test.describe.serial('Create Contact as a Client', () => {
   });
 
   test('should create new contact', async ({ page }) => {
-    console.log("🚀 Starting contact creation test...");
-    
-    try {
+   // try {
       // Navigate directly to clients page (authentication handled by Playwright)
-      console.log("👥 Navigating directly to clients...");
       await clientPage.navigateToClients();
-      
-      console.log("🔘 Clicking clients tab...");
       await clientPage.clickClientsTab();
-      
-      console.log("➕ Clicking add client...");
       await clientPage.clickAddClient();
-      
-      console.log("📝 Filling client details...");
-      await clientPage.fillClientDetails("Test Client");
-      
-      console.log("💾 Saving client...");
+      await clientPage.fillClientDetails("Test Client")
       await clientPage.saveClient();
-      
-      console.log("✅ Contact creation test completed successfully!");
-    } catch (error) {
-      console.error("❌ Test failed:", error);
-      
-      // Take a screenshot for debugging
-      await page.screenshot({ path: 'test-failure-screenshot.png' });
-      console.log("📸 Test failure screenshot saved");
-      
-      throw error;
-    }
+    // } catch (error) {
+    //   // Take a screenshot for debugging
+    //   await page.screenshot({ path: 'test-failure-screenshot.png' });
+    //   throw error;
+    // }
   });
 
   test.skip('should edit client', async () => {

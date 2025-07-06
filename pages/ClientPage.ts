@@ -16,26 +16,20 @@ export class ClientPage {
   // Check if user is authenticated
   async checkAuthentication() {
     try {
-      console.log("🔐 Checking authentication status...");
-      
       // Check if we're redirected to login page
       const currentUrl = this.page.url();
       if (currentUrl.includes('/login')) {
-        console.log("❌ Redirected to login page - authentication required");
         return false;
       }
       
       // Check for common authenticated page elements
       const isAuthenticated = await this.page.locator('body').isVisible();
       if (!isAuthenticated) {
-        console.log("❌ Page not loaded properly");
         return false;
       }
       
-      console.log("✅ Authentication check passed");
       return true;
     } catch (error) {
-      console.error("❌ Authentication check failed:", error);
       return false;
     }
   }
@@ -43,8 +37,6 @@ export class ClientPage {
   // Alternative navigation method through dashboard
   async navigateToClientsViaDashboard() {
     try {
-      console.log("🔄 Navigating to clients via dashboard...");
-      
       // First go to dashboard
       await this.page.goto("http://localhost:4200/bts/dashboard");
       await this.page.waitForLoadState("networkidle");
@@ -54,10 +46,7 @@ export class ClientPage {
       await this.page.goto("http://localhost:4200/bts/clients");
       await this.page.waitForLoadState("networkidle");
       await this.page.waitForTimeout(3000);
-      
-      console.log("✅ Navigation via dashboard completed");
     } catch (error) {
-      console.error("❌ Error during dashboard navigation:", error);
       throw error;
     }
   }
@@ -65,45 +54,24 @@ export class ClientPage {
   // Navigation Actions
   async navigateToClients() {
     try {
-      console.log("🔄 Navigating directly to clients page...");
-      
       // Navigate directly to clients URL since login is already handled
       await this.page.goto("http://localhost:4200/bts/clients");
-      console.log("✅ URL loaded");
 
       // Wait for the page to be fully loaded
       await this.page.waitForLoadState("domcontentloaded");
-      console.log("✅ DOM content loaded");
 
       // Add a small delay to ensure the page is fully rendered
       await this.page.waitForTimeout(3000);
-      console.log("✅ Page rendered");
-
-      // Check if we're on the right page by looking for any client-related element
-      const pageTitle = await this.page.title();
-      console.log("📄 Page title:", pageTitle);
 
       // Wait for the clients tab to be visible and clickable
-      console.log("🔍 Looking for clients tab...");
       await this.page.waitForSelector(ClientLocators.clientsTab, { timeout: 15000 });
-      console.log("✅ Clients tab found");
 
       await this.page.click(ClientLocators.clientsTab);
-      console.log("✅ Clients tab clicked");
       
       await this.page.waitForTimeout(2000);
-      console.log("✅ Navigation completed successfully");
     } catch (error) {
-      console.error("❌ Error during navigation:", error);
-      
       // Take a screenshot for debugging
       await this.page.screenshot({ path: 'debug-navigation-error.png' });
-      console.log("📸 Screenshot saved as debug-navigation-error.png");
-      
-      // Log the current URL
-      const currentUrl = this.page.url();
-      console.log("🌐 Current URL:", currentUrl);
-      
       throw error;
     }
   }

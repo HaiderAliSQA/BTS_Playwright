@@ -1,8 +1,23 @@
 import { chromium } from "@playwright/test";
 import path from "path";
+import fs from "fs";
 
 async function globalSetup() {
   const authFile = path.join(__dirname, "auth.json");
+  
+  // Check if auth.json exists and is less than 24 hours old
+  if (fs.existsSync(authFile)) {
+    const stats = fs.statSync(authFile);
+    const hoursSinceLastLogin = (Date.now() - stats.mtime.getTime()) / (1000 * 60 * 60);
+    
+    if (hoursSinceLastLogin < 24) {
+      console.log('✅ Using existing authentication (less than 24 hours old)');
+      return; // Skip login, use existing auth.json
+    }
+  }
+  
+  console.log('🔐 Starting fresh login process...');
+  
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -26,6 +41,7 @@ async function globalSetup() {
 
   // --- SAVE STORAGE STATE ---
   await context.storageState({ path: authFile });
+  console.log('✅ Authentication saved successfully');
   await browser.close();
 }
 
