@@ -2,6 +2,7 @@ import { Page } from '@playwright/test';
 import { TermLocator } from './locators/TermLocator';
 import { TimeTracking } from './locators/timeTrackingLocator';
 
+
 import path from 'path';
 import { TestUtils } from 'utils/TestUtils';
 import { console } from 'inspector';
@@ -32,26 +33,41 @@ export class TimeTrackingPage {
   }
   async ApplyFilter() {
     await this.page.locator(TimeTracking.ApplyButton).click();
-    await this.page.waitForTimeout(5000);
+    await this.page.waitForTimeout(1000);
   }
   //====================
+  // check All From Time Tracking 
+  async checkAll(){
+    const checkAllCheckbox = this.page.locator(TimeTracking.checkAll);
+    //await checkAllCheckbox.scrollIntoViewIfNeeded();
+    //await checkAllCheckbox.waitFor({ state: "visible" }); // ensure it's visible
+    await checkAllCheckbox.click({ force: true }); // force in case of overlap
+  }
+  //===========================================
+  // Post All Activity 
+  async PostAllActivity (){
+    await this.page.locator(TimeTracking.PostButton).click();
+    await this.page.locator(TermLocator.Confirmsavebtn).click();
 
-// async downloadExcelFromIcon() {
-   
-//   const folderPath = path.join(process.cwd(), 'downloads', 'exported-files');
-//   await fsPromises.mkdir(folderPath, { recursive: true });
+  }
+  async BulkUnpost(){
+     await this.page.locator(TimeTracking.PostButton).click();
+     await this.page.locator(TermLocator.Confirmsavebtn).click();
+  }
 
-//   const [download] = await Promise.all([
-//     this.page.waitForEvent('download', { timeout: 15000 }),
-//     this.page.locator("//i[@class='text-dark mdi mdi-cloud-download font-24']").click(),
-//   ]);
+  // async downloadExcelFromIcon() {
 
-//   const fullPath = path.join(folderPath, download.suggestedFilename());
-//   await download.saveAs(fullPath);
+  //   const folderPath = path.join(process.cwd(), 'downloads', 'exported-files');
+  //   await fsPromises.mkdir(folderPath, { recursive: true });
 
-//   console.log(`✅ File downloaded to: ${fullPath}`);
-// }
+  //   const [download] = await Promise.all([
+  //     this.page.waitForEvent('download', { timeout: 15000 }),
+  //     this.page.locator("//i[@class='text-dark mdi mdi-cloud-download font-24']").click(),
+  //   ]);
 
+  //   const fullPath = path.join(folderPath, download.suggestedFilename());
+  //   await download.saveAs(fullPath);
 
-  
+  //   console.log(`✅ File downloaded to: ${fullPath}`);
+  // }
 }

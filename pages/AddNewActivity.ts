@@ -24,23 +24,23 @@ export class ActivityPage {
     const titleField = this.page.locator(activitylocator.activityName);
     const notesField = this.page.locator(activitylocator.Activity_Notes);
 
-    // 🟡 Read existing value (if any)
+    //  Read existing value (if any)
     const existingTitle = await titleField.inputValue();
 
-    // 🟢 Append new part
+    //  Append new part
     const newTitlePart = `Activity Form playwright ${randomName}`;
     const finalTitle = existingTitle
       ? `${existingTitle} | ${newTitlePart}`
       : newTitlePart;
 
-    // 🔵 Fill updated title and notes
+    //  Fill updated title and notes
     await titleField.fill(finalTitle);
     await notesField.fill(finalTitle);
 
     // ✅ Store if you want to reuse later
     (this as any).generatedActivityTitle = finalTitle;
 
-    console.log("📌 Final Title/Notes:", finalTitle);
+    console.log("Final Title/Notes:", finalTitle);
   }
 
   async selectProvider(partialProviderName: string) {

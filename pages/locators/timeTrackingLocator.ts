@@ -4,4 +4,7 @@ export const TimeTracking = {
   unPostedTab: "//span[normalize-space()='- Unposted']",
   ApplyButton: "//button[normalize-space()='Apply']",
   PostedButton: "//span[normalize-space()='- Posted']",
+  checkAll: '//input[@id="checkAll" and @type="checkbox"]',
+  PostButton:"//button[@class='btn btn-outline-info']",
+  BulkUnpost:"//button[normalize-space()='Bulk Unpost']"
 };
