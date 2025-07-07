@@ -31,7 +31,7 @@ export class TermPage {
     console.log(` Title not found in grid: ${titleText}`);
   }
 
-  async selectLocationTermPartial(partialText: string) {
+  async selectLocation(partialText: string) {
     await this.page.locator(TermLocator.AddTermLocation).click();
 
     const dropdown = this.page.locator(TermLocator.locationDropDowninTerm); // or TermLocator
@@ -79,24 +79,36 @@ export class TermPage {
 
   //============================================================================================
 
-  
-  async selectWBS_ByTitle_XPath( locationMatch: string,  titleToMatch: string) {
+  async clickonServiceType(locationMatch: string, titleToMatch: string) {
+    const locator = this.page.locator(
+      `//span[contains(@class, 'list-item-text') and normalize-space(text()) = "${locationMatch}"]`
+    );
+    await locator.click();
+  }
+  async AddservicetypeFirstTime(titleToMatch: string) {
+    //checkBox ko click karna hai
+    const checkboxLocator = this.page.locator(
+      `//tbody/tr[td[2][normalize-space(text())="${titleToMatch}"]]/td[1]//input[@type="checkbox"]`
+    );
+    await checkboxLocator.first().check({ force: true });
+    console.log(` Checked (XPath): ${titleToMatch}`);
+    await this.page.locator(TermLocator.AddserviceSaveBTN).click();
+  }
+
+  async addMoreServiceType(locationMatch: string, titleToMatch: string) {
     //const location = "Augusta School District"; // ya koi bhi title
 
-   //const locationMatch = "Augusta School District";
-   const locator = this.page.locator(
-     `//span[contains(@class, 'list-item-text') and normalize-space(text()) = "${locationMatch}"]`
-   );
-   await locator.click();
+    //const locationMatch = "Augusta School District";
+    const locator = this.page.locator(
+      `//span[contains(@class, 'list-item-text') and normalize-space(text()) = "${locationMatch}"]`
+    );
+    await locator.click();
 
-   const editIcon = this.page.locator(
-     `//span[contains(@class, 'list-item-text') and normalize-space(text()) = "${locationMatch}"]/ancestor::div[contains(@class, 'practice-item')]//span[contains(@class, 'icon-pencil')]`
-   );
+    const editIcon = this.page.locator(
+      `//span[contains(@class, 'list-item-text') and normalize-space(text()) = "${locationMatch}"]/ancestor::div[contains(@class, 'practice-item')]//span[contains(@class, 'icon-pencil')]`
+    );
 
-   await editIcon.click();
-
-
-
+    await editIcon.click();
 
     // await this.page.locator(TermLocator.locationiconpencil).click();
 
@@ -114,9 +126,9 @@ export class TermPage {
     await this.page.waitForTimeout(2000);
   }
   //======================================================
-  
-  // Search Client 
- 
+
+  // Search Client
+
   async PODetails(
     editservice: string,
     activityTitles: string[],
@@ -157,13 +169,15 @@ export class TermPage {
       }
 
       await input.fill(amountValue);
-      console.log(`✅ Filled amount "${amountValue}" for activity: ${activityTitle}`);
+      console.log(
+        `✅ Filled amount "${amountValue}" for activity: ${activityTitle}`
+      );
     }
+    await this.page.locator(TermLocator.AddPOno_AddPaymentsaveBTS).click();
+    await this.page.waitForTimeout(1000);
 
     await this.page.locator(TermLocator.Confirmsavebtn).click();
-    await this.page.waitForTimeout(5000);
   }
-
 
   //===========
   async fillChargeByTitle(activityTitle: string, amount: string) {

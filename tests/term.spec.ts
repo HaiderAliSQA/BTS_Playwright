@@ -5,7 +5,7 @@ import { StudentPage } from "pages/StudentPage";
 import { ClientPage } from "pages/ClientPage";
 import { DashboardPage } from "pages/dashboard";
 
-test.describe.serial("Create Contact as a Student", () => {
+test.describe.serial("Yahan ik page sy sare Object ban rahen han Term page ky leay ", () => {
   let studentPage: StudentPage;
   let clientPage: ClientPage;
   let dashboard: DashboardPage;
@@ -19,24 +19,21 @@ test.describe.serial("Create Contact as a Student", () => {
     clientPage = new ClientPage(page);
   });
 
-  test.skip("GoTO Term Locator", async ({ page }) => {
+  test("Add service type First Time BY Select Location and Title", async ({ page }) => {
     await clientPage.navigateToClients();
     await clientPage.AttachStudentselectClient("ABC School District");
     //
     await termPage.selectTermByName("Add Term 002");
-    await termPage.selectLocationTermPartial("Location 002");
+    await termPage.selectLocation("Location 001");
     //await termPage.getRowDataByTitle("Assistive Technology / SLP");
 
     //await termPage.selectWBS_ByTitle("CF Supervision");
-    await termPage.selectWBS_ByTitle_XPath(
-      "Augusta School District",
-      "Physical Therapy HY Tech ( Update Service Titile )"
-    );
+    await termPage.AddservicetypeFirstTime("BTO");
     await page.waitForTimeout(5000);
   });
 
   //=================================
-  test("Add PO NUMBER and Amount in the service", async ({ page }) => {
+  test.skip("Add More Services type in the service by Clicking on the Edit Icon", async ({ page }) => {
     await dashboard.gotoDashboard();
     await clientPage.navigateToClients();
     await clientPage.AttachStudentselectClient("ABC School District");
@@ -45,32 +42,35 @@ test.describe.serial("Create Contact as a Student", () => {
     //await termPage.selectLocationTermPartial("Location 002");
     //await termPage.getRowDataByTitle("Assistive Technology / SLP");
 
-    await termPage.selectWBS_ByTitle_XPath(
-      "Location 002",
-      "Physical Therapy HY Tech ( Update Service Titile )"
-    );
-    //     await termPage.PODetails(
-    //   "Foreign Language Evaluation - SPEECH",
-    //   [
-    //     "(SPEECH) TRAVEL MIDDAY - FOREIGN LANGUAGE EVALUATION",
-    //     "(SPEECH) TRAVEL-COMMUTE HOURLY FOREIGN LANGUAGE EVALUATION",
-    //     "(SPEECH) TRAVEL - FOREIGN LANGUAGE EVALUATION"
-    //   ],
-    //   [
-    //     "400",  // Amount for 1st title
-    //     "500",  // Amount for 2nd title
-    //     "600"   // Amount for 3rd title
-    //   ]
-    // );
-
-    await page.waitForTimeout(5000);
-
-    // await termPage.fillChargeByTitle(
-    //   "Foreign Language Evaluation - SPEECH",
-    //   "150"
-    // );
-
-    // await termPage.PODetails("Foreign Language Evaluation - SPEECH");
-    await page.waitForTimeout(5000);
+    await termPage.addMoreServiceType("Location 002", "COVIDDEP");
+   
+    
   });
+  test.skip("Add PO Number and Amount in the service by Clicking on the Edit Icon", async ({ page }) => {
+    await dashboard.gotoDashboard();
+    await clientPage.navigateToClients();
+    await clientPage.AttachStudentselectClient("ABC School District");
+    await termPage.selectTermByName("Add Term 002");
+    // yaahn Location 002 ko select karna hai or Title ko select karna hai
+    await termPage.clickonServiceType(
+      "Location 002",
+      "Foreign Language Evaluation - SPEECH"
+    );
+    // yahan PO Number and Amount add karna hai
+    // yahah Service Type ko select karna hai or on ky leay  Amount add karna hai
+        await termPage.PODetails(
+      "Foreign Language Evaluation - SPEECH",
+      [
+        "(SPEECH) TRAVEL MIDDAY - FOREIGN LANGUAGE EVALUATION",
+        "(SPEECH) TRAVEL-COMMUTE HOURLY FOREIGN LANGUAGE EVALUATION",
+        "(SPEECH) TRAVEL - FOREIGN LANGUAGE EVALUATION"
+      ],
+      [
+        "434",  // Amount for 1st title
+        "545",  // Amount for 2nd title
+        "653"   // Amount for 3rd title
+      ]
+    );
+    await page.waitForTimeout(1000);
+  })
 });

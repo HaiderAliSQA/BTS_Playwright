@@ -18,18 +18,14 @@ test.describe.serial('Create Contact as a Client', () => {
   });
 
   test('should create new contact', async ({ page }) => {
-   // try {
+   
       // Navigate directly to clients page (authentication handled by Playwright)
       await clientPage.navigateToClients();
       await clientPage.clickClientsTab();
       await clientPage.clickAddClient();
       await clientPage.fillClientDetails("Test Client")
       await clientPage.saveClient();
-    // } catch (error) {
-    //   // Take a screenshot for debugging
-    //   await page.screenshot({ path: 'test-failure-screenshot.png' });
-    //   throw error;
-    // }
+   
   });
 
   test.skip('should edit client', async () => {
@@ -44,7 +40,7 @@ test.describe.serial('Create Contact as a Client', () => {
     await clientPage.AttachStudentselectClient("Activity Saved");
     await clientPage.fillClientLocation();
   });
-test.skip("Export Client in XLX File", async ({ page }) => {
+test("Export Client in XLX File", async ({ page }) => {
   await clientPage.navigateToClients();
   await clientPage.searchClient("ABC", "Active", "District", "Prospective");
   await exportFile.downloadExcelFromButtonCLick();
