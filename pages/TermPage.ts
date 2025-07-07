@@ -173,7 +173,7 @@ export class TermPage {
         `✅ Filled amount "${amountValue}" for activity: ${activityTitle}`
       );
     }
-    await this.page.locator(TermLocator.AddPOno_AddPaymentsaveBTS).click();
+    await this.page.locator(TermLocator.SaveButton).click();
     await this.page.waitForTimeout(1000);
 
     await this.page.locator(TermLocator.Confirmsavebtn).click();

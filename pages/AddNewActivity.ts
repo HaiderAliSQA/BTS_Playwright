@@ -2,10 +2,12 @@ import { expect, Page } from "@playwright/test";
 import { activitylocator } from "./locators/activitylocator";
 import { TestUtils } from "../utils/TestUtils";
 import { chromium } from "playwright";
+import { TermLocator } from "pages/locators/TermLocator";
 import path from "path";
 
 export class ActivityPage {
   readonly page: Page;
+  generatedActivityTitle?: string;
 
   constructor(page: Page) {
     this.page = page;
@@ -19,16 +21,29 @@ export class ActivityPage {
 
   async Activity_Titile_Notes() {
     const randomName = TestUtils.generateRandomClientName();
-    //console.log(randomName);
-    // Name Fill
-    const title = this.page.locator(activitylocator.activityName);
-    const titile_Notes = await `Activity Form playwright  ${randomName}`;
-    await title.fill(titile_Notes);
-    const Notes = this.page.locator(activitylocator.Activity_Notes);
-    await Notes.fill(titile_Notes);
+    const titleField = this.page.locator(activitylocator.activityName);
+    const notesField = this.page.locator(activitylocator.Activity_Notes);
+
+    // 🟡 Read existing value (if any)
+    const existingTitle = await titleField.inputValue();
+
+    // 🟢 Append new part
+    const newTitlePart = `Activity Form playwright ${randomName}`;
+    const finalTitle = existingTitle
+      ? `${existingTitle} | ${newTitlePart}`
+      : newTitlePart;
+
+    // 🔵 Fill updated title and notes
+    await titleField.fill(finalTitle);
+    await notesField.fill(finalTitle);
+
+    // ✅ Store if you want to reuse later
+    (this as any).generatedActivityTitle = finalTitle;
+
+    console.log("📌 Final Title/Notes:", finalTitle);
   }
+
   async selectProvider(partialProviderName: string) {
-    
     //Select provider
     await this.page.locator(activitylocator.WBSDropdownContainer).click();
     await this.page
@@ -45,14 +60,11 @@ export class ActivityPage {
         `Selected Provider with partial match: ${partialProviderName}`
       );
     } else {
-      console.log(
-        `No student found with partial name: ${partialProviderName}`
-      );
-    
+      console.log(`No student found with partial name: ${partialProviderName}`);
     }
-
-
-
+  }
+  async SaveActivity() {
+    await this.page.locator(TermLocator.SaveButton).click();
   }
 
   async SelectClient(partialClientName: string) {
@@ -67,9 +79,7 @@ export class ActivityPage {
       await MatchingClientName.first().click();
       console.log(`Selected student with partial match: ${partialClientName}`);
     } else {
-      console.log(
-        `No student found with partial name: ${partialClientName}`
-      );
+      console.log(`No student found with partial name: ${partialClientName}`);
     }
   }
 
@@ -104,9 +114,11 @@ export class ActivityPage {
     //await this.page.waitForTimeout(8000);
 
     // 1. Open the dropdown
-    const activityduration = this.page.locator(activitylocator.activityduration);
+    const activityduration = this.page.locator(
+      activitylocator.activityduration
+    );
 
-    await this.page.waitForTimeout(5000);
+    await this.page.waitForTimeout(1000);
   }
   async selectStudent(partialName: string) {
     await this.page
@@ -151,14 +163,13 @@ export class ActivityPage {
         `Selected student with partial match: ${partialClientLocationNamee}`
       );
     } else {
-    console.log(
+      console.log(
         `No student found with partial name: ${partialClientLocationNamee}`
       );
     }
   }
 
   async RepeatDailyAfter() {
-
     const CurrentDate = TestUtils.getCurrentDate();
     console.log("CurrentDate ", CurrentDate);
 
@@ -188,7 +199,7 @@ export class ActivityPage {
     await this.page
       .locator(activitylocator.activityStartDate)
       .fill(CurrentDate);
-    await this.page.waitForTimeout(5000);
+    await this.page.waitForTimeout(1000);
     const activityTime = TestUtils.generateRandomTime();
     console.log(" Start time of Activity ", activityTime);
     await this.page
@@ -204,18 +215,22 @@ export class ActivityPage {
     const date = TestUtils.getDateAfter7Days();
     await this.page.locator(activitylocator.RepeatEndDateTime).fill(date);
     console.log(" randum date", date);
-    await this.page.waitForTimeout(5000);
+    await this.page.waitForTimeout(1000);
   }
 
   async RepeatWeeklyAfter() {
-const CurrentDate = TestUtils.getCurrentDate();
-console.log("CurrentDate ", CurrentDate);
+    const CurrentDate = TestUtils.getCurrentDate();
+    console.log("CurrentDate ", CurrentDate);
 
-await this.page.locator(activitylocator.activityStartDate).fill(CurrentDate);
-await this.page.waitForTimeout(5000);
-const activityTime = TestUtils.generateRandomTime();
-console.log(" Start time of Activity ", activityTime);
-await this.page.locator(activitylocator.activityStartTime).fill(activityTime);
+    await this.page
+      .locator(activitylocator.activityStartDate)
+      .fill(CurrentDate);
+    await this.page.waitForTimeout(1000);
+    const activityTime = TestUtils.generateRandomTime();
+    console.log(" Start time of Activity ", activityTime);
+    await this.page
+      .locator(activitylocator.activityStartTime)
+      .fill(activityTime);
 
     const RepeatsType = this.page.locator(activitylocator.ActivityType);
     await RepeatsType.selectOption({ label: "Weekly" });
@@ -251,16 +266,18 @@ await this.page.locator(activitylocator.activityStartTime).fill(activityTime);
     await this.page.locator(activitylocator.RepeatEndDateTime).fill(`${date}`);
   }
   async RepeatMonthlyON() {
-
     const CurrentDate = TestUtils.getCurrentDate();
     console.log("Rendum date ", CurrentDate);
 
-    await this.page.locator(activitylocator.activityStartDate).fill(CurrentDate);
+    await this.page
+      .locator(activitylocator.activityStartDate)
+      .fill(CurrentDate);
     await this.page.waitForTimeout(5000);
     const activityTime = TestUtils.generateRandomTime();
     console.log(" Start time of Activity ", activityTime);
-    await this.page.locator(activitylocator.activityStartTime).fill(activityTime);
-
+    await this.page
+      .locator(activitylocator.activityStartTime)
+      .fill(activityTime);
 
     const RepeatsType = this.page.locator(activitylocator.ActivityType);
     await RepeatsType.selectOption({ label: "Monthly" });
@@ -315,9 +332,7 @@ await this.page.locator(activitylocator.activityStartTime).fill(activityTime);
       await MatchingClientName.first().click();
       console.log(`Selected student with partial match: ${partialClientName}`);
     } else {
-     console.log(
-        `No student found with partial name: ${partialClientName}`
-      );
+      console.log(`No student found with partial name: ${partialClientName}`);
     }
   }
   async RepeatchekBox() {

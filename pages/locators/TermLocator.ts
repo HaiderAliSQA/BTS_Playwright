@@ -11,7 +11,7 @@ export const TermLocator = {
   PONumber: "//input[@placeholder='PO Number']",
   TargetTime_input: "//input[@placeholder='Target Time ']",
   TargetAmount_input: "//input[@placeholder='Target Amount ']",
-  AddPOno_AddPaymentsaveBTS: "//button[normalize-space()='Save']",
+  SaveButton: "//button[normalize-space()='Save']",
   Confirmsavebtn: "//button[normalize-space()='Confirm']",
   locationiconpencil:"//span[@class='icon-pencil text-info']",
 };
