@@ -9,6 +9,7 @@ import { console } from 'inspector';
 import { strict } from 'assert';
 import fs from 'fs';
 import fsPromises from 'fs/promises';
+import { expect } from "@playwright/test";
 
 export class TimeTrackingPage {
   readonly page: Page;
@@ -39,9 +40,9 @@ export class TimeTrackingPage {
   // check All From Time Tracking 
   async checkAll(){
     const checkAllCheckbox = this.page.locator(TimeTracking.checkAll);
-    //await checkAllCheckbox.scrollIntoViewIfNeeded();
-    //await checkAllCheckbox.waitFor({ state: "visible" }); // ensure it's visible
-    await checkAllCheckbox.click({ force: true }); // force in case of overlap
+    
+    await checkAllCheckbox.click({ force: true }); 
+    await expect(checkAllCheckbox).toBeChecked();// force in case of overlap
   }
   //===========================================
   // Post All Activity 
