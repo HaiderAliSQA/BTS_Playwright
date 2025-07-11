@@ -21,7 +21,7 @@ import { SimpleActivityDataList } from "../utils/activity";
     //await activityPage.RepeatchekBox()
   });
 //===================================================================
-test("Create multiple Simple (3) activities", async ({ page }) => {
+test("Create multiple Simple (3) activities Created ", async ({ page }) => {
   const activityPage = new ActivityPage(page);
 
   for (const data of SimpleActivityDataList) {
