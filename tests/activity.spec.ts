@@ -3,7 +3,7 @@ import { ActivityPage } from "../pages/AddNewActivity";
 import { SimpleActivityDataList } from "../utils/activity"; 
 
 
-  test.skip("Create a Simple activity", async ({ page }) => {
+  test("Create a Simple activity", async ({ page }) => {
     const activityPage = new ActivityPage(page);
     await activityPage.OpenActivityGrid();
     await activityPage.AtivitytitleAssertion();
@@ -21,7 +21,7 @@ import { SimpleActivityDataList } from "../utils/activity";
     //await activityPage.RepeatchekBox()
   });
 //===================================================================
-test("Create multiple Simple (3) activities Created ", async ({ page }) => {
+test.skip("Create multiple Simple (3) activities Created ", async ({ page }) => {
   const activityPage = new ActivityPage(page);
 
   for (const data of SimpleActivityDataList) {
